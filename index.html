@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AI BOM JSON Schema Viewer</title>
+    <meta name="author" content="Omar Santos, @santosomar">
+    <!-- Bootstrap -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|PT+Sans" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/jsv.css">
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+
+
+  </head>
+  <body>
+
+    <!-- Nav/Toolbar -->
+    <div class="btn-group" id="app-toolbar">
+        <button id="sourceButton" type="button" class="btn btn-default"><span class="glyphicon glyphicon-align-left"> </span> Source</button>
+        <button id="visualizeButton" type="button" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"> </span> Visualize</button>
+
+        <!-- Validator Button
+            <button id="validateButton" type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok"> </span> Validate</button>
+
+        -->
+
+            </div>
+
+    <!-- Editor -->
+    <div id="editor">
+
+<!-- The schema starts here -->
+
+
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "AI BOM",
+    "type": "object",
+    "properties": {
+      "ModelDetails": {
+        "type": "object",
+        "properties": {
+          "Name": { "type": "string" },
+          "Version": { "type": "string" },
+          "Type": { "type": "string" },
+          "Author": { "type": "string" },
+          "Licenses": { "type": "array", "items": { "type": "string" } },
+          "Libraries": { "type": "array", "items": { "type": "string" }, "required": false },
+          "Source": { "type": "string" },
+          "BOMGeneration": {
+            "type": "object",
+            "properties": {
+              "Timestamp": { "type": "string" },
+              "Method": { "type": "string" },
+              "GeneratedBy": { "type": "string" }
+            },
+            "required": false
+          },
+          "OtherReferences": { "type": "array", "items": { "type": "string" }, "required": false },
+          "Tags": { "type": "array", "items": { "type": "string" }, "required": false }
+        },
+        "required": ["Name", "Version", "Type", "Author", "Licenses", "Source"]
+      },
+      "ModelArchitecture": {
+        "type": "object",
+        "properties": {
+          "Datasets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "Name": { "type": "string" },
+                "Source": { "type": "string" },
+                "Usage": { "type": "string" }
+              },
+              "required": ["Name", "Source"]
+            }
+          },
+          "Architecture": { "type": "string", "required": false },
+          "ArchitectureFamily": { "type": "string", "required": false },
+          "ParentModel": { "type": "object", "properties": {
+              "Name": { "type": "string" },
+              "Version": { "type": "string" },
+              "Source": { "type": "string" }
+            }, "required": false
+          },
+          "BaseModel": { "type": "object", "properties": {
+              "Name": { "type": "string" },
+              "Version": { "type": "string" },
+              "Source": { "type": "string" }
+            }, "required": false
+          },
+          "Input": { "type": "string" },
+          "Output": { "type": "string" },
+          "Hardware": { "type": "string", "required": false },
+          "Software": { "type": "string", "required": false },
+          "SoftwareRequiredForExecution": { "type": "boolean" }
+        },
+        "required": ["Datasets", "Input", "Output", "SoftwareRequiredForExecution"]
+      },
+      "Usage": {
+        "type": "object",
+        "properties": {
+          "IntendedUse": { "type": "string" },
+          "OutOfScopeUsage": { "type": "string" },
+          "MisuseOrMaliciousUse": { "type": "string" }
+        },
+        "required": ["IntendedUse", "OutOfScopeUsage", "MisuseOrMaliciousUse"]
+      },
+      "Considerations": {
+        "type": "object",
+        "properties": {
+          "EnvironmentalImpact": { "type": "string", "required": false },
+          "EthicalConsiderations": { "type": "string", "required": false }
+        },
+        "required": []
+      },
+      "Attestations": {
+        "type": "object",
+        "properties": {
+          "Attestation": { "type": "string", "required": false }
+        },
+        "required": []
+      }
+    },
+    "required": ["ModelDetails", "ModelArchitecture", "Usage"]
+  }
+
+
+
+<!-- The schema ends here -->
+
+
+</div>
+
+    <!-- JSV -->
+    <div id="main-body"></div>
+    <script>
+      NProgress.start();
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/ace.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/mode-json.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.5/theme-chrome.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.15.0/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tv4/1.2.7/tv4.min.js"></script>
+    <script src="js/jsv.js"></script>
+    <script src="js/ref-parser.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+      NProgress.done();
+    </script>
+  </body>
+</html>

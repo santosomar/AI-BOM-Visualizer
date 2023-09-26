@@ -1,7 +1,8 @@
 # AI-BOM Schema Visualizer
 
-The [AI BOM (Bill of Materials)(https://github.com/manifest-cyber/ai-bom)] Visualizer is a web-based tool that provides a graphical representation of the JSON schemas for AI BOMs. It is designed to help users understand the structure and relationships within complex AI model schemas. The visualizer is built using D3.js and offers an interactive, expandable tree diagram.
+The [AI BOM (Bill of Materials)](https://github.com/manifest-cyber/ai-bom) [Visualizer](https://aibomviz.aisecurityresearch.org) is a web-based tool that provides a graphical representation of the JSON schemas for AI BOMs. It is designed to help users understand the structure and relationships within complex AI model schemas. The visualizer is built using D3.js and offers an interactive, expandable tree diagram.
 
+The AI BOM schema visualizer can be accessed at: [aibomviz.aisecurityresearch.org](https://aibomviz.aisecurityresearch.org).
 
 ## Features
 
